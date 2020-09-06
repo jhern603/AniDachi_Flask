@@ -5,21 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} {% endblock %}</title>
-    <link rel="stylesheet" href="static\css\main.css">
     <!-- Bootstrap CSS only -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-
     {% block head %} {% endblock %}
 </head>
 
 <body>
     {% block body %} {% endblock %}
 
-
-    <footer class="footer align-bottom text-right">
+    <footer class="footer align-bottom text-right special-color-dark pt-4">
         <div class="container  justify-content-center">
-            <span class="text-muted">&#169; 2020-
+            <span class="text-light">&#169; 2020-
                 <script>document.write(new Date().getFullYear());</script> Jose Hernandez </span>
         </div>
     </footer>

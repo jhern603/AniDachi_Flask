@@ -1,4 +1,3 @@
-.formContainer{
-    margin-top: 8em;
-    background-color: #25FA87;
+body{
+    background: linear-gradient(310deg, rgba(161,2,221,1) 0%, rgba(0,73,167,1) 100%) !important;
 }
