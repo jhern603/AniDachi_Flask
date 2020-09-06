@@ -16,6 +16,23 @@ def posts():
 def login():
     return render_template('index.html')
 
+@app.route('/register', methods=['POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        name = request.form['name']
+        password = request.form['password']
+        number = request.form['number']
+
+        newUserdb = users(username, email, name, number, password)
+        db.session.add(newUserdb)
+        db.session.commit()
+
+        flash('You have successfully registered!')
+
+        return redirect(url_for('index'))
+
 @app.route('/posts/new', methods=['POST'])
 def new():
     if request.method == 'POST':
@@ -67,8 +84,9 @@ def insert():
         email = request.form['email']
         name = request.form['name']
         number = request.form['number']
+        password = request.form['password']
 
-        newUserdb = users(username, email, name, number)
+        newUserdb = users(username, email, name, number, password)
         db.session.add(newUserdb)
         db.session.commit()
 
@@ -84,6 +102,7 @@ def edit():
         data.name = request.form['name']
         data.email = request.form['email']
         data.number = request.form['number']
+        data.number = request.form['password']
         db.session.commit()
 
         flash('"' + data.username + '"' + " edited successfully!")

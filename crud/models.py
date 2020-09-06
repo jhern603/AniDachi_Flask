@@ -11,12 +11,14 @@ class users(db.Model):
     email = db.Column(db.String(300))
     name = db.Column(db.String(300))
     number = db.Column(db.String(300))
+    password = db.Column(db.String(80))
 
-    def __init__(self, username, email, name, number):
+    def __init__(self, username, email, name, number, password):
         self.username = username
         self.email = email
         self.name = name
         self.number = number
+        self.password = password
 
 
 #Posts database

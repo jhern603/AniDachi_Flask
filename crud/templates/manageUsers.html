@@ -31,6 +31,7 @@
                 <th>Name</th>
                 <th>E-Mail</th>
                 <th>Phone</th>
+                <th>Password</th>
                 <th>Action</th>
             </tr>
 
@@ -42,6 +43,7 @@
                 <td>{{row.name}}</td>
                 <td>{{row.email}}</td>
                 <td>{{row.number}}</td>
+                <td type="password">{{row.password}}</td>
                 <td>
                     <a href="/manageUsers/edit/{{row.id}}" class="btn btn-outline-primary btn-xs" data-toggle="modal"
                         data-target="#modalEdit{{row.id}}">Edit</a>
@@ -88,6 +90,12 @@
                                     <input type="tel" id="phone-number" class="form-control" name="number"
                                         placeholder="+1(123)456-7890" value={{row.number}}
                                         oninvalid="this.setCustomValidity('Please Enter Valid Phoner Number')"
+                                        oninput="setCustomValidity('')" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label">Password:</label>
+                                    <input type="password" class="form-control" name="name" placeholder="Enter a name"
+                                        value={{row.password}} oninvalid="this.setCustomValidity('Please Enter Valid Password')"
                                         oninput="setCustomValidity('')" required>
                                 </div>
                                 <div class="form-group">
@@ -138,6 +146,12 @@
                                 <input type="tel" id="phone-number" class="form-control" name="number"
                                     placeholder="+1(123)456-7890"
                                     oninvalid="this.setCustomValidity('Please Enter Valid Phoner Number')"
+                                    oninput="setCustomValidity('')" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Password:</label>
+                                <input type="text" class="form-control" name="name" placeholder="Enter a name"
+                                    oninvalid="this.setCustomValidity('Please Enter Valid Password')"
                                     oninput="setCustomValidity('')" required>
                             </div>
                             <div class="form-group">
