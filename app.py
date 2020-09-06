@@ -1,3 +1,4 @@
+from datetime import datetime, date, time
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 import os
@@ -5,7 +6,7 @@ import os
 app = Flask(__name__)
 app.secret_key= "b'\xb2<\xb0\xdc\xad\x12K\x85\xffj\xe7\x91\x8d\x95\x03Q\x9e\x98\xec.\xdb\x1bk'"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///main.db'
-app.config['SQLALCHEMY_BINDS'] = {'posts':'sqlite:///posts.db',
+app.config['SQLALCHEMY_BINDS'] = {'postdb':'sqlite:///postdb.db',
                                    'users' : 'sqlite:///users.db'}
 
 db=SQLAlchemy(app)
@@ -29,21 +30,68 @@ class users(db.Model):
         self.number = number
 
 #Posts database
-class posts(db.Model):
-    __bind_key__ = 'posts'
+class postdb(db.Model):
+    __bind_key__ = 'postdb'
+    today = datetime.now().strftime('%y%b%d').upper()
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
-    date_posted = db.Column(db.String(100))
+    date_posted = db.Column(db.String, default=today)
     author = db.Column(db.String(100))
     content = db.Column(db.Text)
+
+    def __init__(self, title, author, content):
+        self.title = title
+        self.author = author
+        self.content = content
+
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/posts/')
+@app.route('/posts/',)
 def posts():
-    return render_template('posts.html')
+    postData = postdb.query.all()
+
+    return render_template('posts.html', postData = postData)
+
+@app.route('/posts/new', methods=['POST'])
+def new():
+    if request.method == 'POST':
+        title = request.form['title']
+        author = request.form['author']
+        content = request.form['content']
+
+        newPostdb = postdb(title, author, content)
+        db.session.add(newPostdb)
+        db.session.commit()
+
+        flash('"' + title + '"' + " was posted successfully!")
+
+        return redirect(url_for('posts'))
+
+@app.route('/posts/editPost', methods=['GET', 'POST'])
+def editPost():
+    if request.method == 'POST':
+        data = postdb.query.get(request.form.get('id'))
+        data.title = request.form['title']
+        data.author = request.form['author']
+        data.content = request.form['content']
+        db.session.commit()
+
+        flash('"' + data.title + '"' + " edited successfully!")
+
+        return redirect(url_for('posts'))
+
+@app.route('/posts/deletepost/<id>/', methods=['GET', 'POST'])
+def deletepost(id):
+    data = postdb.query.get(id)
+    db.session.delete(data)
+    db.session.commit()
+
+    flash('"' + data.title + '"' + " was deleted successfully!")
+        
+    return redirect(url_for('posts'))
 
 @app.route('/manageUsers/')
 def manageUsers():
@@ -63,7 +111,7 @@ def insert():
         db.session.add(newUserdb)
         db.session.commit()
 
-        flash(username + " was created successfully!")
+        flash('"' + username + '"' + " was created successfully!")
 
         return redirect(url_for('manageUsers'))
 
@@ -77,7 +125,7 @@ def edit():
         data.number = request.form['number']
         db.session.commit()
 
-        flash(data.username + " edited successfully!")
+        flash('"' + data.username + '"' + " edited successfully!")
 
         return redirect(url_for('manageUsers'))
 
@@ -87,7 +135,7 @@ def delete(id):
     db.session.delete(data)
     db.session.commit()
 
-    flash(data.username + " was deleted successfully!")
+    flash('"' + data.username + '"' + " was deleted successfully!")
         
     return redirect(url_for('manageUsers'))
 

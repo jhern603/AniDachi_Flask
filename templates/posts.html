@@ -10,8 +10,8 @@
 {% block body %}
 <div class="container  mt-5">
     <div class="jumbotron p-4">
-        <h2>Manage <b>Users</b> <button type='button' class="btn btn-success float-right" data-toggle="modal"
-                data-target="#mymodal">+ Add New User</button></h2>
+        <h2><b>Posts</b> <button type='button' class="btn btn-success float-right" data-toggle="modal"
+                data-target="#mymodal">+ Add New Post</button></h2>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         {% for message in messages%}
@@ -24,75 +24,60 @@
         {% endfor %}
         {% endif %}
         {% endwith %}
-        <table class="table table-hover table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Name</th>
-                <th>E-Mail</th>
-                <th>Phone</th>
-                <th>Action</th>
-            </tr>
 
-            {% for row in user %}
 
-            <tr>
-                <td>{{row.id}}</td>
-                <td>{{row.username}}</td>
-                <td>{{row.name}}</td>
-                <td>{{row.email}}</td>
-                <td>{{row.number}}</td>
-                <td>
-                    <a href="/manageUsers/edit/{{row.id}}" class="btn btn-outline-primary btn-xs" data-toggle="modal"
-                        data-target="#modalEdit{{row.id}}">Edit</a>
-                    <a href="/manageUsers/delete/{{row.id}}" class="btn btn-outline-danger btn-xs"
-                        onclick="return confirm('Are you sure that you would like to delete this user?')"
-                        data-target="#modalDelete{{row.id}}">Delete</a>
+        <hr>
+        {% for post in postData %}
+        <h2>{{ post.title }}</h2>
+        {% if post.author %}
+        <h4>By: {{ post.author }} on {{ post.date_posted }}</h4>
+                {% else %}
+                <h6>Author Unavailable on {{ post.date_posted }}</h6>
+                {% endif %}
+                <p style="white-space:break-spaces">{{ post.content }}</p>
+                <a href="/posts/editPost/{{post.id}}" class="btn btn-outline-primary btn-xs" data-toggle="modal"
+                    data-target="#modalEdit{{post.id}}">Edit</a>
+                <a href="/posts/deletepost/{{post.id}}" class="btn btn-outline-danger btn-xs"
+                    onclick="return confirm('Are you sure that you would like to delete this post?')"
+                    data-target="#modalDelete{{post.id}}">Delete</a>
                 </td>
-            </tr>
-            <!-- Edit User Form-->
-            <div class="modal fade" id="modalEdit{{row.id}}" class="modal">
+                </tr>
+                <!-- Edit Post Form-->
+            <div class="modal fade" id="modalEdit{{post.id}}" class="modal">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalEdit">Edit User</h5>
+                            <h5 class="modal-title" id="modalEdit">Edit Post</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form action="{{ url_for('edit') }}" , method="POST" nonvalidate>
+                            <form action="{{ url_for('editPost') }}" , method="POST" nonvalidate>
                                 <div class="form-group">
-                                    <label class="col-form-label">Username:</label>
-                                    <input type="hidden" name="id" value="{{row.id}}">
-                                    <input type="text" class="form-control" name="username" placeholder="Enter username"
-                                        value={{row.username}}
-                                        oninvalid="this.setCustomValidity('Please Enter Valid Username')"
+                                    <label class="col-form-label">Title:</label>
+                                    <input type="hidden" name="id" value="{{post.id}}">
+                                    <input type="text" class="form-control" name="title" placeholder="Enter a Title"
+                                        value="{{post.title}}"
+                                        oninvalid="this.setCustomValidity('Please Enter a Title')"
                                         oninput="setCustomValidity('')" required>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-form-label">Name:</label>
-                                    <input type="text" class="form-control" name="name" placeholder="Enter a name"
-                                        value={{row.name}} oninvalid="this.setCustomValidity('Please Enter Valid Name')"
+                                    <label class="col-form-label">Author:</label>
+                                    <input type="text" class="form-control" name="author" placeholder="Enter a name"
+                                        value="{{post.author}}" oninvalid="this.setCustomValidity('Please Enter an Author')"
                                         oninput="setCustomValidity('')" required>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-form-label">E-Mail:</label>
-                                    <input type="email" class="form-control" name="email" aria-describedby="emailHelp"
-                                        placeholder="Enter email" value={{row.email}}
-                                        oninvalid="this.setCustomValidity('Please Enter Valid E-Mail')"
-                                        oninput="setCustomValidity('')" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-form-label">Phone:</label>
-                                    <input type="tel" id="phone-number" class="form-control" name="number"
-                                        placeholder="+1(123)456-7890" value={{row.number}}
-                                        oninvalid="this.setCustomValidity('Please Enter Valid Phoner Number')"
+                                    <label class="col-form-label">Content:</label>
+                                    <input type="text" class="form-control" name="content"
+                                        placeholder="Enter the content of your post" value={{post.content}}
+                                        oninvalid="this.setCustomValidity('Please Enter Some Content for your Post')"
                                         oninput="setCustomValidity('')" required>
                                 </div>
                                 <div class="form-group">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button class="btn btn-primary" type="submit">Update</button>
+                                    <button class="btn btn-primary" type="submit">Post</button>
                                 </div>
                             </form>
                         </div>
@@ -100,55 +85,50 @@
                     </div>
                 </div>
             </div>
-            {% endfor %}
-        </table>
-        <!-- Create User Form-->
-        <div class="modal fade" id="mymodal" class="modal">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="mymodalLabel">Create a New User</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                </hr>
+                <br><br><br>
+                {% endfor %}
+                <!-- Create Post Form-->
+                <div class="modal fade" id="mymodal" class="modal">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="mymodalLabel">Create a New Post</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ url_for('new') }}" , method="POST">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Title:</label>
+                                        <input type="text" class="form-control" name="title"
+                                            placeholder="Enter a title for your post"
+                                            oninvalid="this.setCustomValidity('This field cannot be blank')"
+                                            oninput="setCustomValidity('')" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-form-label">Author:</label>
+                                        <input type="text" class="form-control" placeholder="Enter an author"
+                                            name="author">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-form-label">Post Content:</label>
+                                        <input type="text" class="form-control" name="content"
+                                            placeholder="Enter post content"
+                                            oninvalid="this.setCustomValidity('This field cannot be blank')"
+                                            oninput="setCustomValidity('')" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                        <button class="btn btn-primary" type="submit">Post</button>
+                                    </div>
+                            </div>
+                            </form>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <form action="{{ url_for('insert') }}" , method="POST">
-                            <div class="form-group">
-                                <label class="col-form-label">Username:</label>
-                                <input type="text" class="form-control" name="username" placeholder="Enter username"
-                                    oninvalid="this.setCustomValidity('Please Enter Valid Username')"
-                                    oninput="setCustomValidity('')" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Name:</label>
-                                <input type="text" class="form-control" placeholder="Enter a name" name="name"
-                                    oninvalid="this.setCustomValidity('Please Enter Valid Name')"
-                                    oninput="setCustomValidity('')" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">E-Mail:</label>
-                                <input type="email" class="form-control" name="email" aria-describedby="emailHelp"
-                                    placeholder="Enter email"
-                                    oninvalid="this.setCustomValidity('Please Enter Valid E-Mail')"
-                                    oninput="setCustomValidity('')" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Phone:</label>
-                                <input type="tel" id="phone-number" class="form-control" name="number"
-                                    placeholder="+1(123)456-7890"
-                                    oninvalid="this.setCustomValidity('Please Enter Valid Phoner Number')"
-                                    oninput="setCustomValidity('')" required>
-                            </div>
-                            <div class="form-group">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button class="btn btn-primary" type="submit">Create User</button>
-                            </div>
-                    </div>
-                    </form>
                 </div>
-            </div>
-        </div>
     </div>
 </div>
 </div>
