@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-from crud import db, app
+from crud import db, app, bcrypt
 from crud.models import postdb, users, main
 
 @app.route('/')
@@ -22,7 +22,8 @@ def register():
         username = request.form['username']
         email = request.form['email']
         name = request.form['name']
-        password = request.form['password']
+        hashed_password=bcrypt.generate_password_hash(request.form['password']).decode('utf-8')
+        password = hashed_password
         number = request.form['number']
 
         newUserdb = users(username, email, name, number, password)
@@ -84,7 +85,8 @@ def insert():
         email = request.form['email']
         name = request.form['name']
         number = request.form['number']
-        password = request.form['password']
+        hashed_password=bcrypt.generate_password_hash(request.form['password']).decode('utf-8')
+        password = hashed_password
 
         newUserdb = users(username, email, name, number, password)
         db.session.add(newUserdb)
