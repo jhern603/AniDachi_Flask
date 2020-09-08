@@ -1,0 +1,8 @@
+{% macro render_field(field) %}
+
+<div class="form-group">
+    <i class="fa fa-user"></i>
+    {{ field(class='form-control', required='required',**kwargs)|safe }}
+  </div>
+
+{% endmacro %}

@@ -1,9 +1,18 @@
 from datetime import datetime, date, time
 from crud import db
-#Main database
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, TextAreaField, SelectField
+from wtforms.validators import InputRequired
+from wtforms.fields.html5 import TelField
+
+# Main database
+
+
 class main(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-#Users database
+# Users database
+
+
 class users(db.Model):
     __bind_key__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -21,7 +30,7 @@ class users(db.Model):
         self.password = password
 
 
-#Posts database
+# Posts database
 class postdb(db.Model):
     __bind_key__ = 'postdb'
     today = datetime.now().strftime('%y%b%d').upper()
@@ -35,3 +44,13 @@ class postdb(db.Model):
         self.title = title
         self.author = author
         self.content = content
+
+# Forms
+
+
+class loginForm(FlaskForm):
+    email = StringField('E-mail', validators=[InputRequired()])
+    name = StringField('Name', validators=[InputRequired()])
+    username = StringField('Username', validators=[InputRequired()])
+    password = PasswordField('Password', validators=[InputRequired()])
+    phone = StringField('Phone Number', validators=[InputRequired()])

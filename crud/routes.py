@@ -1,30 +1,36 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from crud import db, app, bcrypt
-from crud.models import postdb, users, main
+from crud.models import postdb, users, main, loginForm
+
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    login = loginForm()
+    return render_template('index.html', loginform=login)
+
 
 @app.route('/posts/',)
 def posts():
     postData = postdb.query.all()
 
-    return render_template('posts.html', postData = postData)
+    return render_template('posts.html', postData=postData)
+
 
 @app.route('/login/', methods=['POST'])
 def login():
     return render_template('index.html')
 
+
 @app.route('/register', methods=['POST'])
 def register():
     if request.method == 'POST':
-        username = request.form['username']
-        email = request.form['email']
-        name = request.form['name']
-        hashed_password=bcrypt.generate_password_hash(request.form['password']).decode('utf-8')
+        register = loginForm()
+        username = register.username.data
+        email = register.email.data
+        name = register.name.data
+        hashed_password = bcrypt.generate_password_hash(register.password.data).decode('utf-8')
         password = hashed_password
-        number = request.form['number']
+        number = register.phone.data
 
         newUserdb = users(username, email, name, number, password)
         db.session.add(newUserdb)
@@ -33,6 +39,7 @@ def register():
         flash('You have successfully registered!')
 
         return redirect(url_for('index'))
+
 
 @app.route('/posts/new', methods=['POST'])
 def new():
@@ -49,6 +56,7 @@ def new():
 
         return redirect(url_for('posts'))
 
+
 @app.route('/posts/editPost', methods=['GET', 'POST'])
 def editPost():
     if request.method == 'POST':
@@ -62,6 +70,7 @@ def editPost():
 
         return redirect(url_for('posts'))
 
+
 @app.route('/posts/deletepost/<id>/', methods=['GET', 'POST'])
 def deletepost(id):
     data = postdb.query.get(id)
@@ -69,24 +78,28 @@ def deletepost(id):
     db.session.commit()
 
     flash('"' + data.title + '"' + " was deleted successfully!")
-        
+
     return redirect(url_for('posts'))
+
 
 @app.route('/manageUsers/')
 def manageUsers():
+    login = loginForm()
     userData = users.query.all()
 
-    return render_template('manageUsers.html', user = userData)
+    return render_template('manageUsers.html', user=userData, loginform=login)
+
 
 @app.route('/manageUsers/insert', methods=['POST'])
 def insert():
     if request.method == 'POST':
-        username = request.form['username']
-        email = request.form['email']
-        name = request.form['name']
-        number = request.form['number']
-        hashed_password=bcrypt.generate_password_hash(request.form['password']).decode('utf-8')
+        register = loginForm()
+        username = register.username.data
+        email = register.email.data
+        name = register.name.data
+        hashed_password = bcrypt.generate_password_hash(register.password.data).decode('utf-8')
         password = hashed_password
+        number = register.phone.data
 
         newUserdb = users(username, email, name, number, password)
         db.session.add(newUserdb)
@@ -95,6 +108,7 @@ def insert():
         flash('"' + username + '"' + " was created successfully!")
 
         return redirect(url_for('manageUsers'))
+
 
 @app.route('/manageUsers/edit', methods=['GET', 'POST'])
 def edit():
@@ -111,6 +125,7 @@ def edit():
 
         return redirect(url_for('manageUsers'))
 
+
 @app.route('/manageUsers/delete/<id>/', methods=['GET', 'POST'])
 def delete(id):
     data = users.query.get(id)
@@ -118,5 +133,5 @@ def delete(id):
     db.session.commit()
 
     flash('"' + data.username + '"' + " was deleted successfully!")
-        
+
     return redirect(url_for('manageUsers'))

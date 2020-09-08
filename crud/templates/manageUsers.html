@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% include 'header.html' %}
+{% from "_render_field.html" import render_field %}
 {% block title %} Learn Crud {% endblock %}
 
 {% block head %}
@@ -31,7 +32,6 @@
                 <th>Name</th>
                 <th>E-Mail</th>
                 <th>Phone</th>
-                <th>Password</th>
                 <th>Action</th>
             </tr>
 
@@ -43,7 +43,6 @@
                 <td>{{row.name}}</td>
                 <td>{{row.email}}</td>
                 <td>{{row.number}}</td>
-                <td type="password">{{row.password}}</td>
                 <td>
                     <a href="/manageUsers/edit/{{row.id}}" class="btn btn-outline-primary btn-xs" data-toggle="modal"
                         data-target="#modalEdit{{row.id}}">Edit</a>
@@ -65,43 +64,17 @@
                         <div class="modal-body">
                             <form action="{{ url_for('edit') }}" , method="POST" nonvalidate>
                                 <div class="form-group">
-                                    <label class="col-form-label">Username:</label>
-                                    <input type="hidden" name="id" value="{{row.id}}">
-                                    <input type="text" class="form-control" name="username" placeholder="Enter username"
-                                        value={{row.username}}
-                                        oninvalid="this.setCustomValidity('Please Enter Valid Username')"
-                                        oninput="setCustomValidity('')" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-form-label">Name:</label>
-                                    <input type="text" class="form-control" name="name" placeholder="Enter a name"
-                                        value="{{row.name}}" oninvalid="this.setCustomValidity('Please Enter Valid Name')"
-                                        oninput="setCustomValidity('')" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-form-label">E-Mail:</label>
-                                    <input type="email" class="form-control" name="email" aria-describedby="emailHelp"
-                                        placeholder="Enter email" value={{row.email}}
-                                        oninvalid="this.setCustomValidity('Please Enter Valid E-Mail')"
-                                        oninput="setCustomValidity('')" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-form-label">Phone:</label>
-                                    <input type="tel" id="phone-number" class="form-control" name="number"
-                                        placeholder="+1(123)456-7890" value={{row.number}}
-                                        oninvalid="this.setCustomValidity('Please Enter Valid Phoner Number')"
-                                        oninput="setCustomValidity('')" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-form-label">Password:</label>
-                                    <input type="password" class="form-control" name="name" placeholder="Enter a name"
-                                        value={{row.password}} oninvalid="this.setCustomValidity('Please Enter Valid Password')"
-                                        oninput="setCustomValidity('')" required>
-                                </div>
-                                <div class="form-group">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button class="btn btn-primary" type="submit">Update</button>
-                                </div>
+
+                                    {{ render_field(loginform.username, placeholder=loginform.username.label.text, value=row.username) }}
+                                    {{ render_field(loginform.name, placeholder=loginform.name.label.text, value=row.name) }}
+                                    {{ render_field(loginform.email, placeholder=loginform.email.label.text, value=row.email) }}
+                                    {{ render_field(loginform.phone, placeholder=loginform.phone.label.text, value=row.number) }}
+                                    {{ render_field(loginform.password, placeholder=loginform.password.label.text, value=row.password )}}
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                        <button class="btn btn-primary" type="submit">Update</button>
+                                    </div>
                             </form>
                         </div>
 
@@ -122,38 +95,11 @@
                     </div>
                     <div class="modal-body">
                         <form action="{{ url_for('insert') }}" , method="POST">
-                            <div class="form-group">
-                                <label class="col-form-label">Username:</label>
-                                <input type="text" class="form-control" name="username" placeholder="Enter username"
-                                    oninvalid="this.setCustomValidity('Please Enter Valid Username')"
-                                    oninput="setCustomValidity('')" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Name:</label>
-                                <input type="text" class="form-control" placeholder="Enter a name" name="name"
-                                    oninvalid="this.setCustomValidity('Please Enter Valid Name')"
-                                    oninput="setCustomValidity('')" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">E-Mail:</label>
-                                <input type="email" class="form-control" name="email" aria-describedby="emailHelp"
-                                    placeholder="Enter email"
-                                    oninvalid="this.setCustomValidity('Please Enter Valid E-Mail')"
-                                    oninput="setCustomValidity('')" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Phone:</label>
-                                <input type="tel" id="phone-number" class="form-control" name="number"
-                                    placeholder="+1(123)456-7890"
-                                    oninvalid="this.setCustomValidity('Please Enter Valid Phoner Number')"
-                                    oninput="setCustomValidity('')" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Password:</label>
-                                <input type="text" class="form-control" name="name" placeholder="Enter a name"
-                                    oninvalid="this.setCustomValidity('Please Enter Valid Password')"
-                                    oninput="setCustomValidity('')" required>
-                            </div>
+                            {{ render_field(loginform.username, placeholder=loginform.username.label.text) }}
+                            {{ render_field(loginform.name, placeholder=loginform.name.label.text) }}
+                            {{ render_field(loginform.email, placeholder=loginform.email.label.text) }}
+                            {{ render_field(loginform.phone, placeholder=loginform.phone.label.text) }}
+                            {{ render_field(loginform.password, placeholder=loginform.password.label.text) }}
                             <div class="form-group">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 <button class="btn btn-primary" type="submit">Create User</button>

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "_render_field.html" import render_field %}
 
 {% include 'header.html' %}
 {% block title %} Learn Crud {% endblock %}
@@ -20,91 +21,72 @@
         {% if messages %}
         {% for message in messages%}
         <div class="alert alert-success alert-dismissable" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="close">
-                <span aria-hidden="true">X</span>
-            </button>
-            {{message}}
+          <button type="button" class="close" data-dismiss="alert" aria-label="close">
+            <span aria-hidden="true">X</span>
+          </button>
+          {{message}}
         </div>
         {% endfor %}
         {% endif %}
         {% endwith %}
         <h1 class="cover-heading text-light">Welcome to my Page!</h1>
-        <p class="lead text-light">This page looks a little empty right now, but it'll be populated with lots of exciting content
+        <p class="lead text-light">This page looks a little empty right now, but it'll be populated with lots of
+          exciting content
           soon! I promise!</p>
-          <button class="btn btn-primary" data-toggle="modal" href="#login" >Login!</button>
-          <button class="btn btn-primary" data-toggle="modal" href="#register" >Register!</button>
-        </div>
-        <!-- Login Modal -->
-        <div id="login" class="modal fade">
-          <div class="modal-dialog modal-login">
-            <div class="modal-content">
-              <div class="modal-header">				
-                <h4 class="modal-title">Member Login</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              </div>
-              <div class="modal-body">
-                <form action="/examples/actions/confirmation.php" method="post">
-                  <div class="form-group">
-                    <i class="fa fa-user"></i>
-                    <input type="text" class="form-control" placeholder="Username" name="username" required="required">
-                  </div>
-                  <div class="form-group">
-                    <i class="fa fa-lock"></i>
-                    <input type="password" class="form-control" placeholder="Password" name="password" required="required">					
-                  </div>
-                  <div class="form-group">
-                    <input type="submit" class="btn btn-primary btn-block btn-lg" value="Login">
-                  </div>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <a href="#">Forgot Password?</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Register Modal -->
-        <div id="Register" class="modal fade">
-          <div class="modal-dialog modal-login">
-            <div class="modal-content">
-              <div class="modal-header">				
-                <h4 class="modal-title">Make An Account</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              </div>
-              <div class="modal-body">
-                <form action="{{ url_for('register') }}" method="post">
-                  <div class="form-group">
-                    <i class="fa fa-user"></i>
-                    <input type="text" class="form-control" placeholder="Username" name="username" required="required">
-                  </div>
-                  <div class="form-group">
-                    <i class="fa fa-user"></i>
-                    <input type="text" class="form-control" placeholder="Name" name="name" required="required">
-                  </div>
-                  <div class="form-group">
-                    <i class="fa fa-user"></i>
-                    <input type="text" class="form-control" placeholder="E-Mail" name="email" required="required">
-                  </div>
-                  <div class="form-group">
-                    <i class="fa fa-lock"></i>
-                    <input type="password" class="form-control" placeholder="Password" name="password" >					
-                  </div>
-                  <div class="form-group">
-                    <i class="fa fa-user"></i>
-                    <input type="tel" class="form-control" placeholder="Phone number" name="number" required="required">
-                  </div>
-                  <div class="form-group">
-                    <input type="submit" action="{{ url_for('register') }}" class="btn btn-primary btn-block btn-lg" value="Register">
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>      
-          
-      </main>
+        <button class="btn btn-primary" data-toggle="modal" href="#login">Login!</button>
+        <button class="btn btn-primary" data-toggle="modal" href="#register">Register!</button>
     </div>
+    <!-- Login Modal -->
+    <div id="login" class="modal fade">
+      <div class="modal-dialog modal-login">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Member Login</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form action="/examples/actions/confirmation.php" method="post">
+              {{ render_field(loginform.email, placeholder=loginform.email.label.text) }}
+              {{ render_field(loginform.password, placeholder=loginform.password.label.text) }}
+              <div class="form-group">
+                <input type="submit" class="btn btn-primary btn-block btn-lg" value="Login">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <a href="#">Forgot Password?</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Register Modal -->
+    <div id="Register" class="modal fade">
+      <div class="modal-dialog modal-login">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Make An Account</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form action="{{ url_for('register') }}" method="post">
+              {{ render_field(loginform.username, placeholder=loginform.username.label.text) }}
+              {{ render_field(loginform.name, placeholder=loginform.name.label.text) }}
+              {{ render_field(loginform.email, placeholder=loginform.email.label.text) }}
+              {{ render_field(loginform.phone, placeholder=loginform.phone.label.text) }}
+              {{ render_field(loginform.password, placeholder=loginform.password.label.text) }}
+              <div class="form-group">
+                <input type="submit" action="{{ url_for('register') }}" class="btn btn-primary btn-block btn-lg"
+                  value="Register">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </main>
   </div>
+</div>
 </div>
 
 
