@@ -64,12 +64,11 @@
                         <div class="modal-body">
                             <form action="{{ url_for('edit') }}" , method="POST" nonvalidate>
                                 <div class="form-group">
-
-                                    {{ render_field(loginform.username, placeholder=loginform.username.label.text, value=row.username) }}
-                                    {{ render_field(loginform.name, placeholder=loginform.name.label.text, value=row.name) }}
-                                    {{ render_field(loginform.email, placeholder=loginform.email.label.text, value=row.email) }}
-                                    {{ render_field(loginform.phone, placeholder=loginform.phone.label.text, value=row.number) }}
-                                    {{ render_field(loginform.password, placeholder=loginform.password.label.text, value=row.password )}}
+                                    {{ render_field(editUser.id,value=row.id) }}
+                                    {{ render_field(editUser.username, placeholder=editUser.username.label.text, value=row.username) }}
+                                    {{ render_field(editUser.name, placeholder=editUser.name.label.text, value=row.name) }}
+                                    {{ render_field(editUser.email, placeholder=editUser.email.label.text, value=row.email) }}
+                                    {{ render_field(editUser.phone, placeholder=editUser.phone.label.text, value=row.number) }}
                                     <div class="form-group">
                                         <button type="button" class="btn btn-secondary"
                                             data-dismiss="modal">Close</button>

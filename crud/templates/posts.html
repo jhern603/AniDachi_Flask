@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "_render_field.html" import render_field %}
 {% include 'header.html' %}
 {% block title %} Learn Crud {% endblock %}
 
@@ -54,26 +55,9 @@
                     </div>
                     <div class="modal-body">
                         <form action="{{ url_for('editPost') }}" , method="POST" nonvalidate>
-                            <div class="form-group">
-                                <label class="col-form-label">Title:</label>
-                                <input type="hidden" name="id" value="{{post.id}}">
-                                <input type="text" class="form-control" name="title" placeholder="Enter a Title"
-                                    value="{{post.title}}" oninvalid="this.setCustomValidity('Please Enter a Title')"
-                                    oninput="setCustomValidity('')" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Author:</label>
-                                <input type="text" class="form-control" name="author" placeholder="Enter a name"
-                                    value="{{post.author}}" oninvalid="this.setCustomValidity('Please Enter an Author')"
-                                    oninput="setCustomValidity('')" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Content:</label>
-                                <input type="text" class="form-control" name="content"
-                                    placeholder="Enter the content of your post" value={{post.content}}
-                                    oninvalid="this.setCustomValidity('Please Enter Some Content for your Post')"
-                                    oninput="setCustomValidity('')" required>
-                            </div>
+                            {{ render_field(postform.title, placeholder=postform.title.label.text),value=row.title }}
+                            {{ render_field(postform.author, placeholder=postform.author.label.text),value=row.author }}
+                            {{ render_field(postform.content, placeholder=postform.content.label.text),value=row.content }}
                             <div class="form-group">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 <button class="btn btn-primary" type="submit">Post</button>
@@ -99,24 +83,9 @@
                     </div>
                     <div class="modal-body">
                         <form action="{{ url_for('new') }}" , method="POST">
-                            <div class="form-group">
-                                <label class="col-form-label">Title:</label>
-                                <input type="text" class="form-control" name="title"
-                                    placeholder="Enter a title for your post"
-                                    oninvalid="this.setCustomValidity('This field cannot be blank')"
-                                    oninput="setCustomValidity('')" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Author:</label>
-                                <input type="text" class="form-control" placeholder="Enter an author" name="author">
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Post Content:</label>
-                                <input type="textarea" class="form-control" name="content"
-                                    placeholder="Enter post content"
-                                    oninvalid="this.setCustomValidity('This field cannot be blank')"
-                                    oninput="setCustomValidity('')" required>
-                            </div>
+                            {{ render_field(postform.title, placeholder=postform.title.label.text) }}
+                            {{ render_field(postform.author, placeholder=postform.author.label.text) }}
+                            {{ render_field(postform.content, placeholder=postform.content.label.text) }}
                             <div class="form-group">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 <button class="btn btn-primary" type="submit">Post</button>

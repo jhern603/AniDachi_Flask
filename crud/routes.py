@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from crud import db, app, bcrypt
-from crud.models import postdb, users, main, loginForm
+from crud.models import postdb, users, main, loginForm, postForm, editUserForm
 
 
 @app.route('/')
@@ -12,8 +12,8 @@ def index():
 @app.route('/posts/',)
 def posts():
     postData = postdb.query.all()
-
-    return render_template('posts.html', postData=postData)
+    postFormInput = postForm()
+    return render_template('posts.html', postData=postData, post=postFormInput)
 
 
 @app.route('/login/', methods=['POST'])
@@ -44,9 +44,9 @@ def register():
 @app.route('/posts/new', methods=['POST'])
 def new():
     if request.method == 'POST':
-        title = request.form['title']
-        author = request.form['author']
-        content = request.form['content']
+        title = postForm.title.data
+        author = postForm.author.data
+        content = postForm.content.data
 
         newPostdb = postdb(title, author, content)
         db.session.add(newPostdb)
@@ -86,8 +86,9 @@ def deletepost(id):
 def manageUsers():
     login = loginForm()
     userData = users.query.all()
+    edit = editUserForm()
 
-    return render_template('manageUsers.html', user=userData, loginform=login)
+    return render_template('manageUsers.html', user=userData, loginform=login, editUser=edit)
 
 
 @app.route('/manageUsers/insert', methods=['POST'])
@@ -110,15 +111,15 @@ def insert():
         return redirect(url_for('manageUsers'))
 
 
-@app.route('/manageUsers/edit', methods=['GET', 'POST'])
+@app.route('/manageUsers/edit/', methods=['GET', 'POST'])
 def edit():
     if request.method == 'POST':
-        data = users.query.get(request.form.get('id'))
-        data.username = request.form['username']
-        data.name = request.form['name']
-        data.email = request.form['email']
-        data.number = request.form['number']
-        data.number = request.form['password']
+        edit = editUserForm()
+        data = users.query.get(edit.id.data)
+        data.username = edit.username.data
+        data.name = edit.name.data
+        data.email = edit.email.data
+        data.number = edit.phone.data
         db.session.commit()
 
         flash('"' + data.username + '"' + " edited successfully!")

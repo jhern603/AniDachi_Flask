@@ -1,7 +1,7 @@
 from datetime import datetime, date, time
 from crud import db
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, SelectField
+from wtforms import StringField, PasswordField, TextAreaField, SelectField, HiddenField
 from wtforms.validators import InputRequired
 from wtforms.fields.html5 import TelField
 
@@ -45,12 +45,26 @@ class postdb(db.Model):
         self.author = author
         self.content = content
 
-# Forms
-
-
+# Login form manager
 class loginForm(FlaskForm):
+    id = HiddenField('id')
     email = StringField('E-mail', validators=[InputRequired()])
     name = StringField('Name', validators=[InputRequired()])
     username = StringField('Username', validators=[InputRequired()])
     password = PasswordField('Password', validators=[InputRequired()])
     phone = StringField('Phone Number', validators=[InputRequired()])
+
+# Edit User form manager
+class editUserForm(FlaskForm):
+    id = HiddenField('id')
+    email = StringField('E-mail', validators=[InputRequired()])
+    name = StringField('Name', validators=[InputRequired()])
+    username = StringField('Username', validators=[InputRequired()])
+    password = PasswordField('Password')
+    phone = StringField('Phone Number', validators=[InputRequired()])
+
+# Post form manager
+class postForm(FlaskForm):
+    title = StringField('Title', validators=[InputRequired()])
+    author = StringField('Author')
+    content = StringField('Post content', validators=[InputRequired()])
