@@ -1,45 +1,20 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from crud import db, app, bcrypt
-from crud.models import postdb, users, main, loginForm, postForm, editUserForm
+from crud.models import postdb, users, main
+from crud.forms import registerForm, postForm, editUserForm
 
 
 @app.route('/')
 def index():
-    login = loginForm()
+    login = registerForm()
     return render_template('index.html', loginform=login)
 
-
+#Forum Pages
 @app.route('/posts/',)
 def posts():
     postData = postdb.query.all()
     postFormInput = postForm()
     return render_template('posts.html', postData=postData, post=postFormInput)
-
-
-@app.route('/login/', methods=['POST'])
-def login():
-    return render_template('index.html')
-
-
-@app.route('/register', methods=['POST'])
-def register():
-    if request.method == 'POST':
-        register = loginForm()
-        username = register.username.data
-        email = register.email.data
-        name = register.name.data
-        hashed_password = bcrypt.generate_password_hash(register.password.data).decode('utf-8')
-        password = hashed_password
-        number = register.phone.data
-
-        newUserdb = users(username, email, name, number, password)
-        db.session.add(newUserdb)
-        db.session.commit()
-
-        flash('You have successfully registered!')
-
-        return redirect(url_for('index'))
-
 
 @app.route('/posts/new', methods=['POST'])
 def new():
@@ -70,7 +45,6 @@ def editPost():
 
         return redirect(url_for('posts'))
 
-
 @app.route('/posts/deletepost/<id>/', methods=['GET', 'POST'])
 def deletepost(id):
     data = postdb.query.get(id)
@@ -81,20 +55,36 @@ def deletepost(id):
 
     return redirect(url_for('posts'))
 
+#User Management pages
+@app.route('/login/', methods=['POST'])
+def login():
+    return render_template('index.html')
+
+@app.route('/register', methods=['POST'])
+def register():
+    register = registerForm()
+    if register.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(register.password.data).decode('utf-8')
+        password = hashed_password
+        newUserdb = users(username=register.username.data, email=register.email.data, name=register.name.data, number=register.phone.data, password=password)
+        db.session.add(newUserdb)
+        db.session.commit()
+        flash('You have successfully registered!')
+
+    return redirect(url_for('index'))
 
 @app.route('/manageUsers/')
 def manageUsers():
-    login = loginForm()
+    login = registerForm()
     userData = users.query.all()
     edit = editUserForm()
 
     return render_template('manageUsers.html', user=userData, loginform=login, editUser=edit)
 
-
 @app.route('/manageUsers/insert', methods=['POST'])
 def insert():
     if request.method == 'POST':
-        register = loginForm()
+        register = registerForm()
         username = register.username.data
         email = register.email.data
         name = register.name.data
