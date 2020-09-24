@@ -17,13 +17,16 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="/">Home</a>
+                <a {% if request.path == "/" %}class="nav-link active"{% else %} class="nav-link" {% endif %} href="/">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/manageUsers/">Manage Users</a>
+                <a {% if request.path == "/posts/" %}class="nav-link active"{% else %} class="nav-link" {% endif %} href="/posts/">Posts</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/posts/">Posts</a>
+                <a class="nav-link" data-toggle="modal" href="#login">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="modal" href="#register">Register</a>
             </li>
             <li class="nav-item">
                 <!--<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->

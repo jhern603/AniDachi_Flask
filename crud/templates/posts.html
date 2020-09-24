@@ -55,9 +55,10 @@
                     </div>
                     <div class="modal-body">
                         <form action="{{ url_for('editPost') }}" , method="POST" nonvalidate>
-                            {{ render_field(postform.title, placeholder=postform.title.label.text),value=row.title }}
-                            {{ render_field(postform.author, placeholder=postform.author.label.text),value=row.author }}
-                            {{ render_field(postform.content, placeholder=postform.content.label.text),value=row.content }}
+                            {{ render_field(postForm.title, placeholder=postForm.title.label.text,value=post.title) }}
+                            {{ render_field(postForm.author, placeholder=postForm.author.label.text,value=post.author) }}
+                            {{ render_field(postForm.content, placeholder=postForm.content.label.text,value=post.content) }}
+                            {{ render_field(postForm.id, value=post.id) }}
                             <div class="form-group">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 <button class="btn btn-primary" type="submit">Post</button>
@@ -83,9 +84,9 @@
                     </div>
                     <div class="modal-body">
                         <form action="{{ url_for('new') }}" , method="POST">
-                            {{ render_field(postform.title, placeholder=postform.title.label.text) }}
-                            {{ render_field(postform.author, placeholder=postform.author.label.text) }}
-                            {{ render_field(postform.content, placeholder=postform.content.label.text) }}
+                            {{ render_field(postForm.title, placeholder=postForm.title.label.text) }}
+                            {{ render_field(postForm.author, placeholder=postForm.author.label.text) }}
+                            {{ render_field(postForm.content, placeholder=postForm.content.label.text) }}
                             <div class="form-group">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 <button class="btn btn-primary" type="submit">Post</button>
